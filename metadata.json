@@ -1,0 +1,5 @@
+{
+  "name": "OpenCode Studio",
+  "description": "An IDE-styled interface for interacting with Gemini 3 Pro for chat and image analysis tasks.",
+  "requestFramePermissions": []
+}

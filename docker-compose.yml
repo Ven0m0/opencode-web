@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  opencode:
+    build: .
+    container_name: opencode-studio
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      # Persist the workspace directory
+      - ./workspace:/app/workspace
+    environment:
+      # Pass your Gemini API Key here (Required)
+      - API_KEY=${API_KEY}
+    networks:
+      - opencode-net
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: opencode-tunnel
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      # To use Cloudflare Tunnel, set the TUNNEL_TOKEN in your .env file
+      # Get this from the Cloudflare Zero Trust Dashboard > Access > Tunnels
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    depends_on:
+      - opencode
+    networks:
+      - opencode-net
+
+networks:
+  opencode-net:
+    driver: bridge
